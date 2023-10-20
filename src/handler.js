@@ -13,27 +13,6 @@ const addBookHandler = (request, h) => {
     reading,
   } = request.payload;
 
-  const id = nanoid(15);
-  const createdAt = new Date().toISOString();
-  const updateAt = createdAt;
-  const finished = pageCount === readPage? true : false;
-
-  const newBooks = {
-    name,
-    year,
-    author,
-    summary,
-    publisher,
-    pageCount,
-    readPage,
-    finished,
-    reading,
-    createdAt,
-    updateAt,
-  };
-
-  books.push(newBooks);
-
   // checking if its process failed.
   if (name == undefined) {
     const response = h.response({
@@ -54,9 +33,29 @@ const addBookHandler = (request, h) => {
     return response;
   }
 
+  const id = nanoid(16);
+  const createdAt = new Date().toISOString();
+  const updatedAt = createdAt;
+  const finished = pageCount === readPage? true : false;
 
-  const isSuccess = books.filter((book) => book.id === id).length >0;
+  const newBook = {
+    id,
+    name,
+    year,
+    author,
+    summary,
+    publisher,
+    pageCount,
+    readPage,
+    finished,
+    reading,
+    createdAt,
+    updatedAt,
+  };
 
+  books.push(newBook);
+
+  const isSuccess = books.filter((book) => book.id === id).length > 0;
   if (isSuccess) {
     const response = h.response({
       status: 'Success',
@@ -77,6 +76,7 @@ const addBookHandler = (request, h) => {
   response.code(500);
   return response;
 };
+
 
 const getAllBooksHandler = (request, h) => {
   const {name, reading, finished} = request.query;
